@@ -1,0 +1,21 @@
+/* Media queries mixins */
+
+@mixin respond-to($name) {
+    $max: map-get($breakpoints, $name);
+
+    @if $max {
+        @media only screen and (max-width: $max) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+@mixin hover {
+    @media (hover), (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        &:hover {
+            @content;
+        }
+    }
+}
