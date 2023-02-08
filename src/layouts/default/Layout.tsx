@@ -21,7 +21,6 @@ function Layout() {
                     </li>
                 </ul>
             </nav>
-
             <hr />
             <Outlet />
         </div>

@@ -4,6 +4,10 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Layout from 'layouts/default/Layout';
 import Private from 'components/common/Private';
 import Adverts from 'pages/adverts';
+import CreateAdverts from 'pages/createAdvert';
+import EditAdverts from 'pages/editAdvert';
+import FavoriteAdverts from 'pages/favoriteAdverts';
+import MyAdverts from 'pages/myAdverts';
 import Sigin from 'pages/signin';
 import Signup from 'pages/signup';
 
@@ -15,9 +19,10 @@ function App() {
             <Routes>
                 <Route path="/" element={<Private Component={Layout} />}>
                     <Route index element={<Adverts />} />
-                    <Route path="" element={<Adverts />} />
-                    <Route path="" element={<Adverts />} />
-                    <Route path="" element={<Adverts />} />
+                    <Route path="create" element={<CreateAdverts />} />
+                    <Route path="edit" element={<EditAdverts />} />
+                    <Route path="favorites" element={<FavoriteAdverts />} />
+                    <Route path="my" element={<MyAdverts />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>
                 <Route path="signin" element={<Sigin />} />
