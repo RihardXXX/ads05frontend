@@ -31,7 +31,7 @@ function App() {
     return (
         <GlobalContext.Provider value={value}>
             <BrowserRouter>
-                <LoadedPage show={false} />
+                <LoadedPage show={isLoading} />
                 <Routes>
                     <Route path="/" element={<Private Component={Layout} />}>
                         <Route index element={<Adverts />} />
