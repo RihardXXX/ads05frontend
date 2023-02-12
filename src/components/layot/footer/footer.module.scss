@@ -4,4 +4,43 @@
     width: 100%;
     height: 6.4rem;
     border: 2px solid $black;
+
+    nav {
+        height: 100%;
+        width: 100%;
+
+        .list {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .item {
+                width: 25%;
+                height: 100%;
+
+                a {
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    &._active {
+                        background: $light-grey;
+
+                        svg {
+                            // fill: $black;
+                        }
+                    }
+
+                    svg {
+                        width: 2.8rem;
+                        height: 2.8rem;
+                    }
+                }
+            }
+        }
+    }
 }
