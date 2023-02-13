@@ -3,14 +3,31 @@ import styles from './header.module.scss';
 import { useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 
+interface TitleList {
+    [key: string]: string;
+}
+
+// name header form path
+const titleList: TitleList = {
+    '/': 'Все',
+    '/favorites': 'Избранные',
+    '/my': 'Мои',
+    '/create': 'Создать',
+};
+
 const Header = (): JSX.Element => {
     const classes = classNames([[styles.header]]);
 
     const location = useLocation();
 
-    console.log('location: ', location.pathname);
+    const title = titleList[location.pathname];
 
-    return <header className={classes}>header</header>;
+    return (
+        <header className={classes}>
+            <div className={styles.pathName}>{title}</div>
+            <div>menu</div>
+        </header>
+    );
 };
 
 export default Header;
