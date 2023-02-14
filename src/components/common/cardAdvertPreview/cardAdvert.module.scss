@@ -11,6 +11,11 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    margin-top: 1.6rem;
+
+    &:first-child {
+        margin-top: 0;
+    }
 
     .header {
         display: flex;
