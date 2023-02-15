@@ -1,0 +1,46 @@
+import React from 'react';
+import styles from './input.module.scss';
+import classNames from 'classnames';
+
+interface Props {
+    className?: string;
+    id?: string;
+    label?: string;
+    type?: string;
+    maxLength?: number;
+    isError?: boolean;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Input = ({
+    className,
+    id,
+    label = 'label',
+    type = 'text',
+    maxLength,
+    isError,
+    onChange,
+}: Props) => {
+    const classesWrap = classNames([[styles.wrap], className, { test: true }]);
+    const classesInput = classNames([
+        [styles.input],
+        { [styles._isError]: isError },
+    ]);
+
+    return (
+        <div className={classesWrap}>
+            <label htmlFor={id} className={styles.label}>
+                {label}
+            </label>
+            <input
+                id={id}
+                className={classesInput}
+                type={type}
+                maxLength={maxLength}
+                onChange={onChange}
+            />
+        </div>
+    );
+};
+
+export default Input;
