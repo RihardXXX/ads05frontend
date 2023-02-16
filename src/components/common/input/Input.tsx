@@ -9,6 +9,7 @@ interface Props {
     type?: string;
     maxLength?: number;
     isError?: boolean;
+    value?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -19,6 +20,7 @@ const Input = ({
     type = 'text',
     maxLength,
     isError,
+    value,
     onChange,
 }: Props) => {
     const classesWrap = classNames([[styles.wrap], className, { test: true }]);
@@ -37,6 +39,7 @@ const Input = ({
                 className={classesInput}
                 type={type}
                 maxLength={maxLength}
+                value={value}
                 onChange={onChange}
             />
         </div>

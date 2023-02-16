@@ -1,0 +1,52 @@
+@import 'assets/css/variables';
+
+.button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    border-radius: 0.8rem;
+    border: none;
+    font-weight: 600;
+    font-size: 2.1rem;
+    line-height: 32px;
+
+    &.full_black {
+        background: $black;
+        color: $white;
+    }
+
+    &.full_primary {
+        background: $primary;
+        color: $white;
+    }
+
+    &.full_error {
+        background: $error;
+        color: $white;
+    }
+
+    &.outline_black {
+        background: $white;
+        border: 2px solid $dark-grey;
+        color: $black;
+    }
+
+    &.outline_primary {
+        background: $white;
+        border: 2px solid $primary;
+        color: $primary;
+    }
+
+    &.outline_error {
+        background: $white;
+        border: 2px solid $error;
+        color: $error;
+    }
+
+    &.disabled {
+        background: $light-grey;
+        color: $dark-grey;
+    }
+}
