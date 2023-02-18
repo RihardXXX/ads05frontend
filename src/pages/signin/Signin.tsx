@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Input from 'components/common/input';
 import Button from 'components/common/button';
 
-const Sigin = () => {
+const Signin = () => {
     const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
     const [name, setName] = useState('');
@@ -52,4 +52,4 @@ const Sigin = () => {
     );
 };
 
-export default Sigin;
+export default Signin;

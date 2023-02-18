@@ -8,7 +8,7 @@ interface Props {
     label?: string;
     type?: string;
     maxLength?: number;
-    isError?: boolean;
+    isError?: boolean | string;
     value?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
