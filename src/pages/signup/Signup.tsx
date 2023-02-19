@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import styles from './signup.module.scss';
 import classNames from 'classnames';
 import Input from 'components/common/input';
 import Button from 'components/common/button';
 import { SIGN_UP_USER } from 'apollo/mutation';
 import { useMutation } from '@apollo/client';
+import LoadedPage from 'components/LoadedPage/LoadedPage';
 
 const errorsObject = {
     errorUsername: '',
@@ -36,7 +37,7 @@ const Signup = () => {
     }, [errors]);
 
     // apollo
-    const [signUpUser] = useMutation(SIGN_UP_USER);
+    const [signUpUser, { loading, error }] = useMutation(SIGN_UP_USER);
 
     const submitted = (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,7 +51,11 @@ const Signup = () => {
                 password: password,
             },
             onCompleted: (data) => {
-                console.log('data: ', data);
+                const token = data.signUp;
+                console.log('token: ', token);
+                //TODO:  создать кастомный хук по работе с локалсториджем
+                //TODO:  изменить на статус авторизован
+                //TODO:  сменить роут и перейти на главную страницу
             },
             onError: (error) => {
                 console.log('errors: ', error.message);
@@ -91,6 +96,7 @@ const Signup = () => {
 
     return (
         <div className={styles.container}>
+            {loading && <LoadedPage />}
             <h1 className={styles.title}>Войти</h1>
             <p>пожалуйста введите логин и пароль</p>
 

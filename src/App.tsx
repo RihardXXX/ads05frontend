@@ -10,7 +10,7 @@ import CreateAdverts from 'pages/createAdvert';
 import EditAdverts from 'pages/editAdvert';
 import FavoriteAdverts from 'pages/favoriteAdverts';
 import MyAdverts from 'pages/myAdverts';
-import Sigin from 'pages/signin';
+import Signin from 'pages/signin';
 import Signup from 'pages/signup';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
 import GlobalContext from 'store/context';
@@ -21,13 +21,10 @@ const NotFound = () => <h3>Not Found</h3>;
 // console.log(process.env);
 
 function App() {
-    // state loading
-    const [isLoading, setIsLoading] = useState(false);
     // state and dispatch adverts
     const { stateAdverts, dispatch } = useAdverts();
 
     const value = {
-        loading: { isLoading, setIsLoading },
         authorization: {},
         adverts: { stateAdverts, dispatch },
     };
@@ -36,7 +33,6 @@ function App() {
         <ApolloProvider client={client}>
             <GlobalContext.Provider value={value}>
                 <BrowserRouter>
-                    <LoadedPage show={isLoading} />
                     <Routes>
                         <Route
                             path="/"
@@ -52,7 +48,7 @@ function App() {
                             <Route path="my" element={<MyAdverts />} />
                             <Route path="*" element={<NotFound />} />
                         </Route>
-                        <Route path="signin" element={<Sigin />} />
+                        <Route path="signin" element={<Signin />} />
                         <Route path="signup" element={<Signup />} />
                     </Routes>
                 </BrowserRouter>
