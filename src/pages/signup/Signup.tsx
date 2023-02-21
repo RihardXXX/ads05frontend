@@ -37,7 +37,7 @@ const Signup = () => {
     }, [errors]);
 
     // apollo
-    const [signUpUser, { loading, error }] = useMutation(SIGN_UP_USER);
+    const [signUpUser, { loading }] = useMutation(SIGN_UP_USER);
 
     const submitted = (e: React.FormEvent) => {
         e.preventDefault();
@@ -134,7 +134,7 @@ const Signup = () => {
                 )}
 
                 <Button
-                    name="test"
+                    name="регистрация"
                     className={styles.button}
                     type="full"
                     color="black"

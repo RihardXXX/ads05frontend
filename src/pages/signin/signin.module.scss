@@ -19,10 +19,6 @@
         color: $black;
     }
 
-    .name {
-        margin-top: 4.5rem;
-    }
-
     .email {
         margin-top: 2rem;
     }
@@ -31,7 +27,27 @@
         margin-top: 2rem;
     }
 
+    .errorSection {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        width: 100%;
+        background: $white;
+        border: 2px solid $error;
+        border-radius: 0.8rem;
+        color: $error;
+    }
+
     .button {
-        margin-top: 24rem;
+        position: absolute;
+        bottom: 13rem;
+        left: 2rem;
+        right: 2rem;
+    }
+
+    .reset {
+        position: absolute;
+        bottom: 5rem;
+        left: 2rem;
+        right: 2rem;
     }
 }
