@@ -39,11 +39,11 @@ const reducer = (state: StateAdverts, action: ActionAdverts) => {
 };
 
 const useAdverts = () => {
-    const [stateAdverts, dispatch] = useReducer(reducer, initialState);
+    const [stateAdverts, dispatchAdverts] = useReducer(reducer, initialState);
 
     return {
         stateAdverts,
-        dispatch,
+        dispatchAdverts,
     };
 };
 

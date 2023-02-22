@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import client from 'apollo/apollo';
 import './App.scss';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Layout from 'layouts/default/Layout';
 import Private from 'components/common/Private';
+import Public from 'components/common/Public';
 import Adverts from 'pages/adverts';
 import CreateAdverts from 'pages/createAdvert';
 import EditAdverts from 'pages/editAdvert';
@@ -12,9 +13,9 @@ import FavoriteAdverts from 'pages/favoriteAdverts';
 import MyAdverts from 'pages/myAdverts';
 import Signin from 'pages/signin';
 import Signup from 'pages/signup';
-import LoadedPage from 'components/LoadedPage/LoadedPage';
 import GlobalContext from 'store/context';
 import useAdverts from 'store/useAdverts';
+import useAuthorization from 'store/useAuthorization';
 
 const NotFound = () => <h3>Not Found</h3>;
 
@@ -22,11 +23,12 @@ const NotFound = () => <h3>Not Found</h3>;
 
 function App() {
     // state and dispatch adverts
-    const { stateAdverts, dispatch } = useAdverts();
+    const { stateAdverts, dispatchAdverts } = useAdverts();
+    const { stateAuthorization, dispatchAuth } = useAuthorization();
 
     const value = {
-        authorization: {},
-        adverts: { stateAdverts, dispatch },
+        authorization: { stateAuthorization, dispatchAuth },
+        adverts: { stateAdverts, dispatchAdverts },
     };
 
     return (

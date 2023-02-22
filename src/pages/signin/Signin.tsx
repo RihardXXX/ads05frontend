@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { useMutation } from '@apollo/client';
 import { SIGN_IN_USER, RESET_PASSWORD_USER } from 'apollo/mutation';
 import styles from './signin.module.scss';
@@ -6,6 +6,10 @@ import classNames from 'classnames';
 import Input from 'components/common/input';
 import Button from 'components/common/button';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
+import GlobalContext from 'store/context';
+import { setLogin } from 'store/actions';
+import { login } from 'store/actionType';
+import { useNavigate } from 'react-router-dom';
 
 const errorsObject = {
     errorEmail: '',
@@ -15,6 +19,7 @@ const errorsObject = {
 const Signin = () => {
     const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
+    // set title
     useEffect(() => {
         document.title = 'Авторизация пользователя';
     });
@@ -39,6 +44,14 @@ const Signin = () => {
     const [resetPasswordForUser, { loading: loadingPassword }] =
         useMutation(RESET_PASSWORD_USER);
 
+    // context for authorization
+    const {
+        authorization: { dispatchAuth },
+    } = useContext(GlobalContext);
+
+    // navigation
+    const navigate = useNavigate();
+
     const submitted = (e: React.FormEvent) => {
         e.preventDefault();
         // reset error
@@ -51,16 +64,14 @@ const Signin = () => {
             },
             onCompleted: (data) => {
                 const token = data.signIn;
-                console.log('token: ', token);
-                //TODO:  создать кастомный хук по работе с локалсториджем
-                //TODO:  изменить на статус авторизован
-                //TODO:  сменить роут и перейти на главную страницу
+                dispatchAuth(setLogin(login, token));
+                navigate('/');
             },
             onError: (error) => {
-                console.log('errors: ', error.message);
+                // console.log('errors: ', error.message);
                 const [name, text, textErrorEmail] = error.message.split(':');
-                console.log('name: ', name);
-                console.log('text: ', text);
+                // console.log('name: ', name);
+                // console.log('text: ', text);
                 switch (name) {
                     case 'email':
                         setErrors((state) => ({
@@ -155,7 +166,7 @@ const Signin = () => {
                 )}
 
                 <Button
-                    name="test"
+                    name="войти"
                     className={styles.button}
                     type="full"
                     color="black"
