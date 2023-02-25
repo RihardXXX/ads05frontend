@@ -2,9 +2,11 @@ import React from 'react';
 import styles from './cardAdvertList.module.scss';
 import CardAdvertPreview from '../cardAdvertPreview';
 import CardPreview from 'interfaces/CardPreview';
+import LoadedPage from 'components/LoadedPage/LoadedPage';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import InfiniteScroll from 'react-infinite-scroller';
+import classNames from 'classnames';
 
 // interface Props {
 //     adverts: Array<CardPreview> | [];
@@ -12,34 +14,35 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 interface Props {
     adverts: Array<number> | [];
+    isLoading?: boolean;
+    loadMore?: any;
+    hasNextPage?: boolean;
 }
 
-const CardAdvertList = ({ adverts }: Props): JSX.Element => {
-    const loadFunc = () => {
-        console.log('loadFunc');
-    };
+const CardAdvertList = ({
+    adverts,
+    isLoading = false,
+    loadMore,
+    hasNextPage,
+}: Props): JSX.Element => {
+    const classesLoader = classNames(['loader', [styles.loader]]);
 
     return (
-        // <div>
-        //     {adverts.map((advert) => (
-        //         <CardAdvertPreview key={advert.id} {...advert} />
-        //     ))}
-        // </div>
         <div className={styles.listWrapper}>
+            {isLoading && <LoadedPage />}
             <InfiniteScroll
                 pageStart={0}
-                loadMore={loadFunc}
-                hasMore={true || false}
+                loadMore={loadMore}
+                hasMore={hasNextPage}
                 loader={
-                    <div className="loader" key={0}>
-                        Loading ...
+                    <div className={classesLoader} key={374463746}>
+                        Загрузка
                     </div>
                 }
                 useWindow={false}
             >
-                {adverts.map((advert, i) => (
-                    <CardAdvertPreview key={i} />
-                ))}
+                {Boolean(adverts.length) &&
+                    adverts.map((advert, i) => <CardAdvertPreview key={i} />)}
             </InfiniteScroll>
         </div>
     );

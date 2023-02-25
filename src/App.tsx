@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import client from 'apollo/apollo';
 import './App.scss';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import Layout from 'layouts/default/Layout';
 import Private from 'components/common/Private';
-import Public from 'components/common/Public';
 import Adverts from 'pages/adverts';
 import CreateAdverts from 'pages/createAdvert';
 import EditAdverts from 'pages/editAdvert';
@@ -50,8 +49,26 @@ function App() {
                             <Route path="my" element={<MyAdverts />} />
                             <Route path="*" element={<NotFound />} />
                         </Route>
-                        <Route path="signin" element={<Signin />} />
-                        <Route path="signup" element={<Signup />} />
+                        <Route
+                            path="signin"
+                            element={
+                                stateAuthorization.isLoggedIn ? (
+                                    <Navigate to="/" />
+                                ) : (
+                                    <Signin />
+                                )
+                            }
+                        />
+                        <Route
+                            path="signup"
+                            element={
+                                stateAuthorization.isLoggedIn ? (
+                                    <Navigate to="/" />
+                                ) : (
+                                    <Signup />
+                                )
+                            }
+                        />
                     </Routes>
                 </BrowserRouter>
             </GlobalContext.Provider>

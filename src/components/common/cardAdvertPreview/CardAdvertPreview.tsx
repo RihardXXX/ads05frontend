@@ -9,6 +9,15 @@ import { ReactComponent as Message } from 'assets/icons/messaging.svg';
 // TODO: подключить библиотеку бесконечный скроллинг
 // FIXME:
 
+interface Props {
+    author: string;
+    avatar?: string;
+    createdAt: string;
+    content: string;
+    favoriteCount: number;
+    commentsCount: number;
+}
+
 // const CardAdvertPreview = ({ icon, name, date, content, favorite, favoriteCount, messagesCount }: CardPreview): JSX.Element => {
 const CardAdvertPreview = (): JSX.Element => {
     // const [favorite, setFavorite] = useState(false);

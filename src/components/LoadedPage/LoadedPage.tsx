@@ -2,8 +2,16 @@ import React from 'react';
 import styles from './loadedPage.module.scss';
 import classNames from 'classnames';
 
-const LoadedPage = (): JSX.Element => {
-    const classes = classNames([[styles.overlay], { [styles._show]: true }]);
+interface Props {
+    className?: string;
+}
+
+const LoadedPage = ({ className }: Props): JSX.Element => {
+    const classes = classNames([
+        [styles.overlay],
+        className,
+        { [styles._show]: true },
+    ]);
 
     return (
         <div className={classes}>
