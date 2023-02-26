@@ -2,7 +2,7 @@
 
 .card {
     width: 100%;
-    height: 19.5rem;
+    max-height: 14.5rem;
     background: $white;
     border: 2px solid $black;
     border-radius: 0.8rem;
@@ -28,6 +28,11 @@
         .icon {
             width: 2.8rem;
             height: 2.8rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
 
         .wrapHeader {
@@ -56,6 +61,7 @@
         font-size: 1.6rem;
         line-height: 2.4rem;
         color: $black;
+        margin: 1rem 0;
     }
 
     .footer {

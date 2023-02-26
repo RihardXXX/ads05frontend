@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './cardAdvertList.module.scss';
 import CardAdvertPreview from '../cardAdvertPreview';
-import CardPreview from 'interfaces/CardPreview';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -42,7 +41,17 @@ const CardAdvertList = ({
                 useWindow={false}
             >
                 {Boolean(adverts.length) &&
-                    adverts.map((advert, i) => <CardAdvertPreview key={i} />)}
+                    adverts.map((advert: any) => (
+                        <CardAdvertPreview
+                            key={advert._id}
+                            name={advert.name}
+                            author={advert.author}
+                            comments={advert.comments}
+                            createdAt={advert.createdAt}
+                            content={advert.content}
+                            favoriteCount={advert.favoriteCount}
+                        />
+                    ))}
             </InfiniteScroll>
         </div>
     );

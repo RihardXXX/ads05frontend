@@ -19,6 +19,7 @@ function Adverts() {
     });
 
     const loadMore = () => {
+        console.log('load more');
         fetchMore({
             variables: {
                 offset: data.advertFeed.adverts.length,
