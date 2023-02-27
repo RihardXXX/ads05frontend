@@ -44,6 +44,7 @@ const CardAdvertList = ({
                     adverts.map((advert: any) => (
                         <CardAdvertPreview
                             key={advert._id}
+                            id={advert._id}
                             name={advert.name}
                             author={advert.author}
                             comments={advert.comments}

@@ -7,6 +7,10 @@ const GlobalContext = createContext({
         dispatchAuth: any;
     },
     adverts: {},
+    header: {} as {
+        headerName: string | undefined;
+        setHeader: any;
+    },
 });
 
 export default GlobalContext;

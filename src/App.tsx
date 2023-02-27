@@ -10,11 +10,13 @@ import CreateAdverts from 'pages/createAdvert';
 import EditAdverts from 'pages/editAdvert';
 import FavoriteAdverts from 'pages/favoriteAdverts';
 import MyAdverts from 'pages/myAdverts';
+import DetailAdvert from 'pages/detailAdvert';
 import Signin from 'pages/signin';
 import Signup from 'pages/signup';
 import GlobalContext from 'store/context';
 import useAdverts from 'store/useAdverts';
 import useAuthorization from 'store/useAuthorization';
+import useHeader from 'store/useHeader';
 
 const NotFound = () => <h3>Not Found</h3>;
 
@@ -24,10 +26,12 @@ function App() {
     // state and dispatch adverts
     const { stateAdverts, dispatchAdverts } = useAdverts();
     const { stateAuthorization, dispatchAuth } = useAuthorization();
+    const { headerName, setHeader } = useHeader('');
 
     const value = {
         authorization: { stateAuthorization, dispatchAuth },
         adverts: { stateAdverts, dispatchAdverts },
+        header: { headerName, setHeader },
     };
 
     return (
@@ -47,6 +51,10 @@ function App() {
                                 element={<FavoriteAdverts />}
                             />
                             <Route path="my" element={<MyAdverts />} />
+                            <Route
+                                path="detail-advert/:id"
+                                element={<DetailAdvert />}
+                            />
                             <Route path="*" element={<NotFound />} />
                         </Route>
                         <Route
