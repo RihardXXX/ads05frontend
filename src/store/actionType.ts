@@ -6,5 +6,6 @@ const resetAllAdverts = 'resetAllAdverts';
 
 const login = 'login';
 const logout = 'logout';
+const userData = 'userData';
 
-export { initialAllAdverts, resetAllAdverts, login, logout };
+export { initialAllAdverts, resetAllAdverts, login, logout, userData };

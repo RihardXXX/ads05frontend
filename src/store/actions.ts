@@ -1,9 +1,9 @@
 import { Advert } from 'interfaces/Advert';
 import {
     initialAllAdverts,
-    resetAllAdverts,
-    login,
-    logout,
+    // resetAllAdverts,
+    // login,
+    // logout,
 } from 'store/actionType';
 
 // adverts
@@ -28,4 +28,9 @@ const setLogout = (type: 'logout', payload: ''): object => ({
     payload,
 });
 
-export { allAdverts, resetAdverts, setLogin, setLogout };
+const setUser = (type: 'userData', payload: object): object => ({
+    type,
+    payload,
+});
+
+export { allAdverts, resetAdverts, setLogin, setLogout, setUser };

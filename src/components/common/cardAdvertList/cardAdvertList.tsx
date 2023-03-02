@@ -51,6 +51,7 @@ const CardAdvertList = ({
                             createdAt={advert.createdAt}
                             content={advert.content}
                             favoriteCount={advert.favoriteCount}
+                            favoritedBy={advert.favoritedBy}
                         />
                     ))}
             </InfiniteScroll>

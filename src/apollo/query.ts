@@ -23,7 +23,22 @@ export const ADVERTS_FEED = gql`
                     _id
                     content
                 }
+                favoritedBy {
+                    id
+                }
             }
+        }
+    }
+`;
+
+export const ME_USER = gql`
+    query Me {
+        me {
+            _id
+            username
+            avatar
+            email
+            createdAt
         }
     }
 `;

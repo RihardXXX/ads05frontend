@@ -63,8 +63,10 @@ const Signin = () => {
                 password: password,
             },
             onCompleted: (data) => {
-                const token = data.signIn;
-                dispatchAuth(setLogin(login, token));
+                const userAndToken = data.signIn;
+                // console.log('token: ', token);
+                // console.log('user: ', user);
+                dispatchAuth(setLogin(login, userAndToken));
                 navigate('/');
             },
             onError: (error) => {

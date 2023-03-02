@@ -1,29 +1,43 @@
 import React, { useReducer, useCallback } from 'react';
-import { login, logout } from 'store/actionType';
+import { login, logout, userData } from 'store/actionType';
+
+interface Payload {
+    token: string;
+    user: object;
+}
 
 export interface ActionAuthorization {
-    type: 'login' | 'logout';
-    payload: string | '';
+    type: 'login' | 'logout' | 'userData';
+    payload: Payload;
 }
 
 export interface StateAuthorization {
     isLoggedIn: boolean;
     token?: string;
+    user?: object;
 }
 
 const initialState: StateAuthorization = {
     isLoggedIn: false,
     token: '',
+    user: {},
 };
+
+// TODO: сделать авто авторизацию после перезагрузки отправляя токен
+// TODO: аналогично авторизации сделать регистрацию поведение с сохранением токена и пользователя
+// TODO: сделать в объявлениях избранное выбрано или нет окраску
+// TODO: сделать запрос на избранное
+// TODO: продумать обновление состояния после запроса на избранное
 
 const reducer = (state: StateAuthorization, action: ActionAuthorization) => {
     switch (action.type) {
         case login:
-            localStorage.setItem('token', action.payload);
+            localStorage.setItem('token', action.payload.token);
             return {
                 ...state,
                 isLoggedIn: true,
-                token: action.payload,
+                token: action.payload.token,
+                user: action.payload.user,
             };
         case logout:
             localStorage.removeItem('token');
@@ -31,6 +45,12 @@ const reducer = (state: StateAuthorization, action: ActionAuthorization) => {
                 ...state,
                 isLoggedIn: false,
                 token: '',
+                user: {},
+            };
+        case userData:
+            return {
+                ...state,
+                user: action.payload,
             };
         default:
             return state;
@@ -42,13 +62,15 @@ const useAuthorization = () => {
     const setInitialState = useCallback((): StateAuthorization => {
         const token = localStorage.getItem('token');
 
-        return !token
-            ? initialState
-            : {
-                  ...initialState,
-                  isLoggedIn: true,
-                  token: token,
-              };
+        if (!token) {
+            return initialState;
+        } else {
+            return {
+                ...initialState,
+                isLoggedIn: true,
+                token: token,
+            };
+        }
     }, [localStorage.getItem('token')]);
 
     const [stateAuthorization, dispatchAuth] = useReducer(

@@ -8,7 +8,16 @@ export const SIGN_UP_USER = gql`
 
 export const SIGN_IN_USER = gql`
     mutation SignIn($email: String!, $password: String!) {
-        signIn(email: $email, password: $password)
+        signIn(email: $email, password: $password) {
+            token
+            user {
+                __typename
+                _id
+                username
+                avatar
+                createdAt
+            }
+        }
     }
 `;
 

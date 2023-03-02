@@ -1,15 +1,15 @@
 import React, { useEffect, useContext } from 'react';
-import styles from './adverts.module.scss';
-import classNames from 'classnames';
+// import styles from './adverts.module.scss';
+// import classNames from 'classnames';
 import CardAdvertList from 'components/common/cardAdvertList/cardAdvertList';
 import { ADVERTS_FEED } from 'apollo/query';
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import GlobalContext from 'store/context';
 
-const data = [1, 2, 3, 4, 5, 6, 7];
+// const data = [1, 2, 3, 4, 5, 6, 7];
 
 function Adverts() {
-    const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
+    // const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
     const {
         header: { setHeader },
@@ -26,7 +26,7 @@ function Adverts() {
     });
 
     const loadMore = () => {
-        console.log('load more');
+        // console.log('load more');
         fetchMore({
             variables: {
                 offset: data.advertFeed.adverts.length,

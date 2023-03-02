@@ -24,6 +24,7 @@ interface Props {
     content: string;
     favoriteCount: number;
     name: string;
+    favoritedBy: [];
 }
 
 const CardAdvertPreview = ({
@@ -34,9 +35,12 @@ const CardAdvertPreview = ({
     favoriteCount,
     author,
     content,
+    favoritedBy,
 }: Props): JSX.Element => {
-    // const [favorite, setFavorite] = useState(false);
-    const [favorite, setFavorite] = useState(false);
+    const isFavorite = useMemo(
+        () => favoritedBy.some((user: any) => user.id === 'test'),
+        []
+    );
 
     const toggleFavorite = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -46,11 +50,11 @@ const CardAdvertPreview = ({
 
     const isFavoriteIcon = classNames([
         [styles.heart],
-        { [styles._isFavorite]: favorite },
+        { [styles._isFavorite]: isFavorite },
     ]);
     const isFavoriteCount = classNames([
         [styles.count],
-        { [styles._isFavorite]: favorite },
+        { [styles._isFavorite]: isFavorite },
     ]);
 
     // Memo field
