@@ -8,9 +8,7 @@ import { stringToDate } from 'utils';
 import { useNavigate } from 'react-router-dom';
 import GlobalContext from 'store/context';
 
-// TODO: сделать сетку компонент для карточек
-// TODO: подключить библиотеку бесконечный скроллинг
-// FIXME:
+// TODO: сделать запрос на избранное с обновлением на клиенте
 
 interface Author {
     avatar: string;
@@ -37,10 +35,18 @@ const CardAdvertPreview = ({
     content,
     favoritedBy,
 }: Props): JSX.Element => {
-    const isFavorite = useMemo(
-        () => favoritedBy.some((user: any) => user.id === 'test'),
-        []
-    );
+    // Change Header Page
+    const {
+        header: { setHeader },
+        authorization: {
+            stateAuthorization: { user },
+        },
+    } = useContext(GlobalContext);
+
+    // me liked
+    const isFavorite = useMemo(() => {
+        return favoritedBy.some(({ id }) => id === user?._id);
+    }, []);
 
     const toggleFavorite = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -60,11 +66,6 @@ const CardAdvertPreview = ({
     // Memo field
     const avatar = useMemo<string>(() => author?.avatar, [author]);
     const username = useMemo<string>(() => author?.username, [author]);
-
-    // Change Header Page
-    const {
-        header: { setHeader },
-    } = useContext(GlobalContext);
 
     // Detail Page select
     const navigate = useNavigate();

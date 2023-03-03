@@ -6,6 +6,10 @@ import Button from 'components/common/button';
 import { SIGN_UP_USER } from 'apollo/mutation';
 import { useMutation } from '@apollo/client';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
+import { setLogin } from 'store/actions';
+import { login } from 'store/actionType';
+import GlobalContext from 'store/context';
+import { useNavigate } from 'react-router-dom';
 
 const errorsObject = {
     errorUsername: '',
@@ -14,11 +18,19 @@ const errorsObject = {
 };
 
 const Signup = () => {
-    const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
+    // const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
     useEffect(() => {
         document.title = 'Регистрация пользователя';
     });
+
+    // auth dispatch
+    const {
+        authorization: { dispatchAuth },
+    } = useContext(GlobalContext);
+
+    // router
+    const navigate = useNavigate();
 
     // state
     const [username, setUsername] = useState('');
@@ -51,17 +63,12 @@ const Signup = () => {
                 password: password,
             },
             onCompleted: (data) => {
-                const token = data.signUp;
-                console.log('token: ', token);
-                //TODO:  создать кастомный хук по работе с локалсториджем
-                //TODO:  изменить на статус авторизован
-                //TODO:  сменить роут и перейти на главную страницу
+                const userAndToken = data.signUp;
+                dispatchAuth(setLogin(login, userAndToken));
+                navigate('/');
             },
             onError: (error) => {
-                console.log('errors: ', error.message);
                 const [name, text, textErrorEmail] = error.message.split(':');
-                console.log('name: ', name);
-                console.log('text: ', text);
                 switch (name) {
                     case 'username':
                         setErrors((state) => ({

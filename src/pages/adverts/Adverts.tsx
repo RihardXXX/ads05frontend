@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useLayoutEffect, useContext } from 'react';
 // import styles from './adverts.module.scss';
 // import classNames from 'classnames';
 import CardAdvertList from 'components/common/cardAdvertList/cardAdvertList';
@@ -15,7 +15,7 @@ function Adverts() {
         header: { setHeader },
     } = useContext(GlobalContext);
 
-    useEffect(() => setHeader('Все объявления'), []);
+    useLayoutEffect(() => setHeader('Все объявления'), []);
 
     const { loading, data, fetchMore } = useQuery(ADVERTS_FEED, {
         variables: {

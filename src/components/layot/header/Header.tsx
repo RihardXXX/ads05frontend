@@ -8,7 +8,7 @@ import GlobalContext from 'store/context';
 //     [key: string]: string;
 // }
 
-// // name header form path
+// // // name header form path
 // const titleList: TitleList = {
 //     '/': 'Все',
 //     '/favorites': 'Избранные',

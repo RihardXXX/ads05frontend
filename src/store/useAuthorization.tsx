@@ -1,26 +1,29 @@
 import React, { useReducer, useCallback } from 'react';
 import { login, logout, userData } from 'store/actionType';
 
-interface Payload {
-    token: string;
-    user: object;
+export interface User {
+    _id: string;
+    username: string;
+    email: string;
+    avatar: string;
+    createdAt: string;
 }
 
 export interface ActionAuthorization {
     type: 'login' | 'logout' | 'userData';
-    payload: Payload;
+    payload: any;
 }
 
 export interface StateAuthorization {
     isLoggedIn: boolean;
     token?: string;
-    user?: object;
+    user?: User;
 }
 
 const initialState: StateAuthorization = {
     isLoggedIn: false,
     token: '',
-    user: {},
+    user: undefined,
 };
 
 // TODO: сделать авто авторизацию после перезагрузки отправляя токен
@@ -37,7 +40,7 @@ const reducer = (state: StateAuthorization, action: ActionAuthorization) => {
                 ...state,
                 isLoggedIn: true,
                 token: action.payload.token,
-                user: action.payload.user,
+                user: action.payload?.user,
             };
         case logout:
             localStorage.removeItem('token');
@@ -45,7 +48,7 @@ const reducer = (state: StateAuthorization, action: ActionAuthorization) => {
                 ...state,
                 isLoggedIn: false,
                 token: '',
-                user: {},
+                user: undefined,
             };
         case userData:
             return {
