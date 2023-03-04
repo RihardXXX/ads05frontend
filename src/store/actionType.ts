@@ -8,4 +8,14 @@ const login = 'login';
 const logout = 'logout';
 const userData = 'userData';
 
-export { initialAllAdverts, resetAllAdverts, login, logout, userData };
+// adverts
+const updateAdvert = 'updateAdvert';
+
+export {
+    initialAllAdverts,
+    resetAllAdverts,
+    login,
+    logout,
+    userData,
+    updateAdvert,
+};

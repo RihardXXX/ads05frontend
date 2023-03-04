@@ -7,6 +7,8 @@ import { ReactComponent as Message } from 'assets/icons/messaging.svg';
 import { stringToDate } from 'utils';
 import { useNavigate } from 'react-router-dom';
 import GlobalContext from 'store/context';
+import { useMutation } from '@apollo/client';
+import { TOGGLE_FAVORITE } from 'apollo/mutation';
 
 // TODO: сделать запрос на избранное с обновлением на клиенте
 
@@ -46,12 +48,23 @@ const CardAdvertPreview = ({
     // me liked
     const isFavorite = useMemo(() => {
         return favoritedBy.some(({ id }) => id === user?._id);
-    }, []);
+    }, [favoriteCount]);
+
+    // apollo
+    const [addRemoveFavorite, { loading }] = useMutation(TOGGLE_FAVORITE);
 
     const toggleFavorite = (e: React.MouseEvent) => {
         e.stopPropagation();
-        // setFavorite(!favorite);
-        console.log('toggle favorite');
+        addRemoveFavorite({
+            variables: {
+                toggleFavoriteId: id,
+            },
+            //  если будет сбои при выборе избранного то вручную менять состояние
+            // onCompleted: data => {
+            //     const advert = data.toggleFavorite;
+            //     console.log('data: ', advert);
+            // }
+        });
     };
 
     const isFavoriteIcon = classNames([

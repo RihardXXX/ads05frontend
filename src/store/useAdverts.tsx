@@ -1,6 +1,10 @@
 import React, { useReducer } from 'react';
 import { Advert } from 'interfaces/Advert';
-import { initialAllAdverts, resetAllAdverts } from 'store/actionType';
+import {
+    initialAllAdverts,
+    resetAllAdverts,
+    updateAdvert,
+} from 'store/actionType';
 
 interface StateAdverts {
     allAdverts: Array<Advert> | [];
@@ -29,6 +33,12 @@ const reducer = (state: StateAdverts, action: ActionAdverts) => {
                 allAdverts: [...state.allAdverts, ...action.payload],
             };
         case resetAllAdverts:
+            return {
+                ...state,
+                allAdverts: [],
+            };
+        case updateAdvert: // этот кейс осуществляет аполло под капотом
+            // тут находим и вырезаем это объявление и подставляем новое
             return {
                 ...state,
                 allAdverts: [],

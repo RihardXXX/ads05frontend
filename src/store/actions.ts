@@ -16,6 +16,11 @@ const resetAdverts = (): object => ({
     type: resetAdverts,
 });
 
+const updateAdvert = (type: 'updateAdvert', payload: object) => ({
+    type,
+    payload,
+});
+
 // authorization
 
 const setLogin = (type: 'login', payload: string): object => ({
@@ -33,4 +38,4 @@ const setUser = (type: 'userData', payload: object): object => ({
     payload,
 });
 
-export { allAdverts, resetAdverts, setLogin, setLogout, setUser };
+export { allAdverts, resetAdverts, setLogin, setLogout, setUser, updateAdvert };

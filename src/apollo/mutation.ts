@@ -35,3 +35,27 @@ export const RESET_PASSWORD_USER = gql`
         requestLinkForPassword(email: $email)
     }
 `;
+
+export const TOGGLE_FAVORITE = gql`
+    mutation ToggleFavorite($toggleFavoriteId: String!) {
+        toggleFavorite(id: $toggleFavoriteId) {
+            _id
+            author {
+                avatar
+                username
+            }
+            name
+            content
+            createdAt
+            favoriteCount
+            favoritedBy {
+                id
+            }
+            content
+            comments {
+                _id
+                content
+            }
+        }
+    }
+`;
