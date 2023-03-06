@@ -1,15 +1,12 @@
 import React from 'react';
 import styles from './cardAdvertList.module.scss';
-import CardAdvertPreview from '../cardAdvertPreview';
+import CardAdvertPreview from 'components/common/cardAdvertPreview';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import InfiniteScroll from 'react-infinite-scroller';
 import classNames from 'classnames';
-
-// interface Props {
-//     adverts: Array<CardPreview> | [];
-// }
+import NotAdverts from 'components/common/notAdverts';
 
 interface Props {
     adverts: Array<number> | [];
@@ -31,12 +28,14 @@ const CardAdvertList = ({
             {isLoading && <LoadedPage />}
             <InfiniteScroll
                 pageStart={0}
-                loadMore={loadMore}
+                loadMore={() => (!isLoading ? loadMore() : undefined)}
                 hasMore={hasNextPage}
                 loader={
-                    <div className={classesLoader} key={374463746}>
-                        Загрузка
-                    </div>
+                    hasNextPage && (
+                        <div className={classesLoader} key={374463746}>
+                            Загрузка
+                        </div>
+                    )
                 }
                 useWindow={false}
             >
@@ -54,6 +53,9 @@ const CardAdvertList = ({
                             favoritedBy={advert.favoritedBy}
                         />
                     ))}
+                {Boolean(!adverts.length) && !isLoading && (
+                    <NotAdverts message="Объявления отсутствуют" />
+                )}
             </InfiniteScroll>
         </div>
     );

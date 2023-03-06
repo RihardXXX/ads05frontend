@@ -8,7 +8,7 @@ export const ADVERTS_FEED = gql`
             nextPage
             offset
             limit
-            page
+            # page
             adverts {
                 _id
                 name

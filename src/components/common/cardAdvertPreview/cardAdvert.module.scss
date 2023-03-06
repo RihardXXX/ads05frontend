@@ -17,6 +17,10 @@
         margin-top: 0;
     }
 
+    &:last-child {
+        margin-bottom: 1.6rem;
+    }
+
     .header {
         display: flex;
         justify-content: flex-start;
