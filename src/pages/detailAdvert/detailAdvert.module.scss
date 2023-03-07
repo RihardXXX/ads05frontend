@@ -1,0 +1,60 @@
+@import 'assets/css/variables';
+
+.detailPage {
+    // padding: 1.5rem 0;
+    height: 100%;
+    overflow: auto;
+
+    .wrapperHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        font-weight: 400;
+        font-size: 1.4rem;
+        color: $dark-grey;
+
+        .watch {
+            width: 50%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+
+            svg {
+                width: 2.8rem;
+                height: 2rem;
+            }
+
+            span {
+                margin-left: 0.5rem;
+            }
+        }
+
+        .created {
+            width: 50%;
+            text-align: right;
+        }
+    }
+
+    .name {
+        margin-top: 2rem;
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: $black;
+    }
+
+    .content {
+        margin-top: 1rem;
+        font-size: 1.6rem;
+        line-height: 2.4rem;
+    }
+
+    .tags {
+        margin-top: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}
