@@ -42,3 +42,25 @@ export const ME_USER = gql`
         }
     }
 `;
+
+export const DETAIL_ADVERT = gql`
+    query Advert($advertId: String!) {
+        advert(id: $advertId) {
+            _id
+            author {
+                avatar
+                username
+            }
+            name
+            content
+            category
+            createdAt
+            favoriteCount
+            favoritedBy {
+                id
+            }
+            contact
+            watch
+        }
+    }
+`;

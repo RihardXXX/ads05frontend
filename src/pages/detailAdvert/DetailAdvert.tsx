@@ -1,12 +1,48 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './detailAdvert.module.scss';
 import classNames from 'classnames';
 import { ReactComponent as Watch } from 'assets/icons/watch.svg';
 import Button from 'components/common/button';
 import { ReactComponent as Heart } from 'assets/icons/favorite.svg';
+import { useParams } from 'react-router-dom';
+import { useLazyQuery } from '@apollo/client';
+import { DETAIL_ADVERT } from 'apollo/query';
+import Hashids from 'hashids';
+import LoadedPage from 'components/LoadedPage/LoadedPage';
 
 const DetailAdvert = () => {
     const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
+
+    // route param
+    const { id } = useParams();
+
+    // apollo
+    const [getAdvert, { data, loading, error }] = useLazyQuery(DETAIL_ADVERT);
+
+    // initial advert
+    useEffect(() => {
+        if (!id) {
+            return;
+        }
+
+        const _id = new Hashids().decodeHex(id);
+
+        // console.log(_id);
+        getAdvert({
+            variables: {
+                advertId: _id,
+            },
+            notifyOnNetworkStatusChange: true,
+            onCompleted(data) {
+                console.log(data);
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
+    }, []);
+
+    const advert = useMemo(() => data?.advert, [data]);
 
     const isFavorite = false;
 
@@ -19,8 +55,13 @@ const DetailAdvert = () => {
         { [styles._isFavorite]: isFavorite },
     ]);
 
+    if (error) {
+        return <h3>Что то пошло не так и объявление не найдено</h3>;
+    }
+
     return (
         <div className={styles.detailPage}>
+            {loading && <LoadedPage />}
             <div className={styles.authorSection}>
                 <div className={styles.icon}>
                     <img src="" alt="" />

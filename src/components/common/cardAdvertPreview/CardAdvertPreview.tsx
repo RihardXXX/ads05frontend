@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import GlobalContext from 'store/context';
 import { useMutation } from '@apollo/client';
 import { TOGGLE_FAVORITE } from 'apollo/mutation';
+import Hashids from 'hashids';
 
 // TODO: сделать запрос на избранное с обновлением на клиенте
 
@@ -85,7 +86,8 @@ const CardAdvertPreview = ({
 
     const detailAdvert = (): void => {
         setHeader('Подробное описание');
-        navigate(`/detail-advert/${id}`);
+        const slug = new Hashids().encodeHex(id);
+        navigate(`/detail-advert/${slug}`);
     };
 
     return (
