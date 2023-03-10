@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useContext, useLayoutEffect } from 'react';
 import styles from './detailAdvert.module.scss';
 import classNames from 'classnames';
 import { ReactComponent as Watch } from 'assets/icons/watch.svg';
@@ -9,9 +9,18 @@ import { useLazyQuery } from '@apollo/client';
 import { DETAIL_ADVERT } from 'apollo/query';
 import Hashids from 'hashids';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
+import GlobalContext from 'store/context';
+import { plural, stringToDate } from 'utils/index';
 
 const DetailAdvert = () => {
     const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
+
+    const {
+        header: { setHeader },
+    } = useContext(GlobalContext);
+
+    // set header
+    useLayoutEffect(() => setHeader('Подробное описание'), []);
 
     // route param
     const { id } = useParams();
@@ -42,6 +51,7 @@ const DetailAdvert = () => {
         });
     }, []);
 
+    // base data
     const advert = useMemo(() => data?.advert, [data]);
 
     const isFavorite = false;
@@ -62,50 +72,69 @@ const DetailAdvert = () => {
     return (
         <div className={styles.detailPage}>
             {loading && <LoadedPage />}
-            <div className={styles.authorSection}>
-                <div className={styles.icon}>
-                    <img src="" alt="" />
-                </div>
-                <div className={styles.author}>author</div>
-            </div>
-            <div className={styles.wrapperHeader}>
-                <div className={styles.watch}>
-                    <Watch />
-                    <span>0</span>
-                    <span>watches</span>
-                </div>
-                <div className={styles.created}>5 марта 2023 г., 14:06</div>
-            </div>
-            <h3 className={styles.name}>Welcome to the app</h3>
-            <p className={styles.content}>
-                Lorem ipsum dolor sit amet consectetur. Velit et sodales sociis
-                sapien quis egestas. Mauris commodo mi faucibus sit eget in non.
-                Eu enim molestie hendrerit quisque malesuada nisl sit.
-            </p>
-            <div className={styles.tags}>
-                <Button name="теги" type="outline" color="black" />
-                <Button name="теги" type="outline" color="black" />
-                <Button name="теги" type="outline" color="black" />
-                <Button name="теги" type="outline" color="black" />
-                <Button name="теги" type="outline" color="black" />
-                <Button name="теги" type="outline" color="black" />
-            </div>
-            <div className={styles.contactSection}>
-                <h5 className={styles.title}>contact:</h5>
-                <p className={styles.description}>
-                    Lorem ipsum dolor sit amet consectetur. Velit et sodales
-                    sociis sapien quis egestas. Mauris commodo mi faucibus sit
-                    eget in non. Eu enim molestie hendrerit quisque malesuada
-                    nisl sit.
-                </p>
-            </div>
-            <div
-                className={styles.wrapFavorite}
-                onClick={() => console.log(112)}
-            >
-                <Heart className={isFavoriteIcon} />
-                <div className={isFavoriteCount}>0</div>
-            </div>
+
+            {Boolean(advert) && (
+                <>
+                    <div className={styles.authorSection}>
+                        <div className={styles.icon}>
+                            <img src={advert.author.avatar} alt="" />
+                        </div>
+                        <div className={styles.author}>
+                            {advert?.author?.username}
+                        </div>
+                    </div>
+                    <div className={styles.wrapperHeader}>
+                        <div className={styles.watch}>
+                            <Watch />
+                            <span>{advert?.watch}</span>
+                            <span>
+                                {plural(advert?.watch, [
+                                    'просмотр',
+                                    'просмотра',
+                                    'просмотров',
+                                ])}
+                            </span>
+                        </div>
+                        <div className={styles.created}>
+                            {stringToDate(advert.createdAt)}
+                        </div>
+                    </div>
+                    <h3 className={styles.name}>{advert.name}</h3>
+                    <p className={styles.content}>{advert.content}</p>
+
+                    {Boolean(advert.category.length) && (
+                        <div className={styles.tags}>
+                            {advert.category.map((category: string) => {
+                                return (
+                                    <Button
+                                        key={`category ${category}`}
+                                        name={category}
+                                        type="outline"
+                                        color="black"
+                                    />
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {Boolean(advert.contact) && (
+                        <div className={styles.contactSection}>
+                            <h5 className={styles.title}>контакты:</h5>
+                            <p className={styles.description}>
+                                {advert.contact}
+                            </p>
+                        </div>
+                    )}
+
+                    <div
+                        className={styles.wrapFavorite}
+                        onClick={() => console.log(112)}
+                    >
+                        <Heart className={isFavoriteIcon} />
+                        <div className={isFavoriteCount}>0</div>
+                    </div>
+                </>
+            )}
 
             <div className={styles.commentSection}>
                 <h5 className={styles.title}>comments:</h5>
