@@ -5,18 +5,22 @@ import { ReactComponent as Watch } from 'assets/icons/watch.svg';
 import Button from 'components/common/button';
 import { ReactComponent as Heart } from 'assets/icons/favorite.svg';
 import { useParams } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { DETAIL_ADVERT } from 'apollo/query';
 import Hashids from 'hashids';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
 import GlobalContext from 'store/context';
 import { plural, stringToDate } from 'utils/index';
+import { TOGGLE_FAVORITE } from 'apollo/mutation';
 
 const DetailAdvert = () => {
-    const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
+    // const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
     const {
         header: { setHeader },
+        authorization: {
+            stateAuthorization: { user },
+        },
     } = useContext(GlobalContext);
 
     // set header
@@ -54,7 +58,12 @@ const DetailAdvert = () => {
     // base data
     const advert = useMemo(() => data?.advert, [data]);
 
-    const isFavorite = false;
+    // me liked
+    const isFavorite = useMemo(() => {
+        return advert?.favoritedBy.some(
+            ({ id }: { id?: string }): boolean => id === user?._id
+        );
+    }, [advert]);
 
     const isFavoriteIcon = classNames([
         [styles.heart],
@@ -64,6 +73,22 @@ const DetailAdvert = () => {
         [styles.count],
         { [styles._isFavorite]: isFavorite },
     ]);
+
+    // apollo
+    const [addRemoveFavorite] = useMutation(TOGGLE_FAVORITE);
+
+    const toggleFavorite = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!id) {
+            return;
+        }
+        const _id = new Hashids().decodeHex(id);
+        addRemoveFavorite({
+            variables: {
+                toggleFavoriteId: _id,
+            },
+        });
+    };
 
     if (error) {
         return <h3>Что то пошло не так и объявление не найдено</h3>;
@@ -128,10 +153,12 @@ const DetailAdvert = () => {
 
                     <div
                         className={styles.wrapFavorite}
-                        onClick={() => console.log(112)}
+                        onClick={toggleFavorite}
                     >
                         <Heart className={isFavoriteIcon} />
-                        <div className={isFavoriteCount}>0</div>
+                        <div className={isFavoriteCount}>
+                            {advert.favoriteCount}
+                        </div>
                     </div>
                 </>
             )}
