@@ -93,41 +93,6 @@
         }
     }
 
-    .wrapFavorite {
-        margin-top: 1.6rem;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-
-        .heart {
-            width: 2.2rem;
-            height: 2.2rem;
-
-            path {
-                stroke: $dark-grey;
-            }
-
-            &._isFavorite {
-                path {
-                    stroke: $primary;
-                    fill: $primary;
-                }
-            }
-        }
-
-        .count {
-            margin-left: 0.5rem;
-            font-weight: 600;
-            font-size: 2.1rem;
-            line-height: 3.2rem;
-            color: $dark-grey;
-
-            &._isFavorite {
-                color: $primary;
-            }
-        }
-    }
-
     .commentSection {
         margin-top: 1.6rem;
         .title {
@@ -152,6 +117,14 @@
                 font-size: 1.6rem;
                 line-height: 2.4rem;
             }
+        }
+
+        .moreComment {
+            font-size: 1.4rem;
+            font-weight: normal;
+            padding: 0.5rem;
+            margin: 0 auto;
+            margin-bottom: 1rem;
         }
     }
 }

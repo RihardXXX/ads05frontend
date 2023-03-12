@@ -64,3 +64,23 @@ export const DETAIL_ADVERT = gql`
         }
     }
 `;
+
+export const COMMENT_FEED = gql`
+    query CommentFeed($offset: Int!, $limit: Int!, $idAdvert: ID!) {
+        commentFeed(offset: $offset, limit: $limit, idAdvert: $idAdvert) {
+            limit
+            offset
+            hasNextPage
+            nextPage
+            totalComments
+            comments {
+                _id
+                author {
+                    username
+                }
+                content
+                createdAt
+            }
+        }
+    }
+`;

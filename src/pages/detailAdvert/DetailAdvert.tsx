@@ -1,17 +1,36 @@
 import React, { useEffect, useMemo, useContext, useLayoutEffect } from 'react';
 import styles from './detailAdvert.module.scss';
-import classNames from 'classnames';
 import { ReactComponent as Watch } from 'assets/icons/watch.svg';
 import Button from 'components/common/button';
-import { ReactComponent as Heart } from 'assets/icons/favorite.svg';
 import { useParams } from 'react-router-dom';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { DETAIL_ADVERT } from 'apollo/query';
+import { DETAIL_ADVERT, COMMENT_FEED } from 'apollo/query';
 import Hashids from 'hashids';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
 import GlobalContext from 'store/context';
 import { plural, stringToDate } from 'utils/index';
 import { TOGGLE_FAVORITE } from 'apollo/mutation';
+import FavoriteButton from 'components/common/favoriteButton';
+
+interface DetailAdvert {
+    _id: string;
+    author: { avatar: string; username: string };
+    category: Array<string> | [];
+    contact: string;
+    content: string;
+    favoriteCount: number;
+    favoritedBy: [] | Array<{ id: string }>;
+    name: string;
+    watch: number;
+    createdAt: string;
+}
+
+interface Comment {
+    _id: string;
+    author: { username: string };
+    content: string;
+    createdAt: string;
+}
 
 const DetailAdvert = () => {
     // const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
@@ -27,13 +46,23 @@ const DetailAdvert = () => {
     useLayoutEffect(() => setHeader('Подробное описание'), []);
 
     // route param
-    const { id } = useParams();
+    const { id }: { id?: string } = useParams();
+
+    const limit = 4;
 
     // apollo
     const [getAdvert, { data, loading, error }] = useLazyQuery(DETAIL_ADVERT);
+    const [
+        getComments,
+        {
+            data: dataComments,
+            fetchMore: fetchMoreComments,
+            loading: isLoadingComments,
+        },
+    ] = useLazyQuery(COMMENT_FEED);
 
     // initial advert
-    useEffect(() => {
+    useEffect((): void => {
         if (!id) {
             return;
         }
@@ -46,46 +75,98 @@ const DetailAdvert = () => {
                 advertId: _id,
             },
             notifyOnNetworkStatusChange: true,
-            onCompleted(data) {
-                console.log(data);
+            // onCompleted(data) {
+            //     console.log(data);
+            // },
+            // onError: (error) => {
+            //     console.log(error);
+            // },
+        });
+
+        getComments({
+            variables: {
+                limit: limit,
+                offset: 0,
+                idAdvert: _id,
             },
-            onError: (error) => {
-                console.log(error);
-            },
+            notifyOnNetworkStatusChange: true,
+            // onCompleted(data) {
+            //     console.log('comments: ', data);
+            // },
+            // onError: (error) => {
+            //     console.log('error comments', error);
+            // },
         });
     }, []);
 
+    const comments: undefined | Array<Comment> = useMemo(() => {
+        if (!dataComments) {
+            return;
+        }
+        return dataComments?.commentFeed?.comments;
+    }, [dataComments]);
+
     // base data
-    const advert = useMemo(() => data?.advert, [data]);
+    const advert: undefined | DetailAdvert = useMemo(() => {
+        if (!data) {
+            return;
+        }
+        return data?.advert;
+    }, [data]);
 
     // me liked
-    const isFavorite = useMemo(() => {
-        return advert?.favoritedBy.some(
-            ({ id }: { id?: string }): boolean => id === user?._id
+    const isFavorite = useMemo<boolean>(() => {
+        return Boolean(
+            advert?.favoritedBy.some(
+                ({ id }: { id?: string }): boolean => id === user?._id
+            )
         );
     }, [advert]);
-
-    const isFavoriteIcon = classNames([
-        [styles.heart],
-        { [styles._isFavorite]: isFavorite },
-    ]);
-    const isFavoriteCount = classNames([
-        [styles.count],
-        { [styles._isFavorite]: isFavorite },
-    ]);
 
     // apollo
     const [addRemoveFavorite] = useMutation(TOGGLE_FAVORITE);
 
-    const toggleFavorite = (e: React.MouseEvent) => {
+    const toggleFavorite = (e: React.MouseEvent): void => {
         e.stopPropagation();
+
         if (!id) {
             return;
         }
+
         const _id = new Hashids().decodeHex(id);
         addRemoveFavorite({
             variables: {
                 toggleFavoriteId: _id,
+            },
+        });
+    };
+
+    const loadMoreComments = (e: React.MouseEvent): void => {
+        e.stopPropagation();
+        // console.log('loadMore comments');
+        if (!id) {
+            return;
+        }
+
+        const _id = new Hashids().decodeHex(id);
+
+        fetchMoreComments({
+            variables: {
+                limit: limit,
+                offset: dataComments.commentFeed.comments.length,
+                idAdvert: _id,
+            },
+            updateQuery: (previousResult: any, { fetchMoreResult }: any) => {
+                return {
+                    commentFeed: {
+                        ...fetchMoreResult.commentFeed,
+                        offset: fetchMoreResult.commentFeed.offset + limit,
+                        comments: [
+                            ...previousResult.commentFeed.comments,
+                            ...fetchMoreResult.commentFeed.comments,
+                        ],
+                    },
+                };
             },
         });
     };
@@ -96,13 +177,13 @@ const DetailAdvert = () => {
 
     return (
         <div className={styles.detailPage}>
-            {loading && <LoadedPage />}
+            {loading || (isLoadingComments && <LoadedPage />)}
 
             {Boolean(advert) && (
                 <>
                     <div className={styles.authorSection}>
                         <div className={styles.icon}>
-                            <img src={advert.author.avatar} alt="" />
+                            <img src={advert?.author.avatar} alt="" />
                         </div>
                         <div className={styles.author}>
                             {advert?.author?.username}
@@ -113,23 +194,24 @@ const DetailAdvert = () => {
                             <Watch />
                             <span>{advert?.watch}</span>
                             <span>
-                                {plural(advert?.watch, [
-                                    'просмотр',
-                                    'просмотра',
-                                    'просмотров',
-                                ])}
+                                {advert &&
+                                    plural(advert?.watch, [
+                                        'просмотр',
+                                        'просмотра',
+                                        'просмотров',
+                                    ])}
                             </span>
                         </div>
                         <div className={styles.created}>
-                            {stringToDate(advert.createdAt)}
+                            {advert && stringToDate(advert?.createdAt)}
                         </div>
                     </div>
-                    <h3 className={styles.name}>{advert.name}</h3>
-                    <p className={styles.content}>{advert.content}</p>
+                    <h3 className={styles.name}>{advert?.name}</h3>
+                    <p className={styles.content}>{advert?.content}</p>
 
-                    {Boolean(advert.category.length) && (
+                    {Boolean(advert?.category.length) && (
                         <div className={styles.tags}>
-                            {advert.category.map((category: string) => {
+                            {advert?.category.map((category: string) => {
                                 return (
                                     <Button
                                         key={`category ${category}`}
@@ -142,39 +224,56 @@ const DetailAdvert = () => {
                         </div>
                     )}
 
-                    {Boolean(advert.contact) && (
+                    {Boolean(advert?.contact) && (
                         <div className={styles.contactSection}>
                             <h5 className={styles.title}>контакты:</h5>
                             <p className={styles.description}>
-                                {advert.contact}
+                                {advert?.contact}
                             </p>
                         </div>
                     )}
 
-                    <div
-                        className={styles.wrapFavorite}
+                    <FavoriteButton
+                        isFavorite={isFavorite}
+                        count={advert?.favoriteCount}
                         onClick={toggleFavorite}
-                    >
-                        <Heart className={isFavoriteIcon} />
-                        <div className={isFavoriteCount}>
-                            {advert.favoriteCount}
-                        </div>
-                    </div>
+                    />
                 </>
             )}
 
             <div className={styles.commentSection}>
-                <h5 className={styles.title}>comments:</h5>
-                {[1, 2, 3, 4, 5, 6].map((index) => {
-                    return (
-                        <article key={index} className={styles.card}>
-                            <h6 className={styles.author}>author</h6>
-                            <p className={styles.comment}>
-                                content jfhgkehdkdshkfs
-                            </p>
-                        </article>
-                    );
-                })}
+                {Boolean(comments?.length) && (
+                    <>
+                        <h5 className={styles.title}>комментарии:</h5>
+                        {comments?.map((comment) => {
+                            return (
+                                <article
+                                    key={comment._id}
+                                    className={styles.card}
+                                >
+                                    <h6 className={styles.author}>
+                                        {comment.author.username}
+                                    </h6>
+                                    <p className={styles.comment}>
+                                        {comment.content}
+                                    </p>
+                                </article>
+                            );
+                        })}
+                    </>
+                )}
+
+                {Boolean(
+                    comments?.length != dataComments?.commentFeed?.totalComments
+                ) && (
+                    <Button
+                        name="еще комментарии"
+                        type="outline"
+                        color="black"
+                        className={styles.moreComment}
+                        onClick={loadMoreComments}
+                    />
+                )}
             </div>
         </div>
     );

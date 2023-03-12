@@ -10,6 +10,7 @@ import GlobalContext from 'store/context';
 import { useMutation } from '@apollo/client';
 import { TOGGLE_FAVORITE } from 'apollo/mutation';
 import Hashids from 'hashids';
+import FavoriteButton from '../favoriteButton';
 
 // TODO: сделать запрос на избранное с обновлением на клиенте
 
@@ -68,15 +69,6 @@ const CardAdvertPreview = ({
         });
     };
 
-    const isFavoriteIcon = classNames([
-        [styles.heart],
-        { [styles._isFavorite]: isFavorite },
-    ]);
-    const isFavoriteCount = classNames([
-        [styles.count],
-        { [styles._isFavorite]: isFavorite },
-    ]);
-
     // Memo field
     const avatar = useMemo<string>(() => author?.avatar, [author]);
     const username = useMemo<string>(() => author?.username, [author]);
@@ -105,10 +97,11 @@ const CardAdvertPreview = ({
             </div>
             <div className={styles.content}>{name}</div>
             <div className={styles.footer}>
-                <div className={styles.wrapFavorite} onClick={toggleFavorite}>
-                    <Heart className={isFavoriteIcon} />
-                    <div className={isFavoriteCount}>{favoriteCount}</div>
-                </div>
+                <FavoriteButton
+                    isFavorite={isFavorite}
+                    count={favoriteCount}
+                    onClick={toggleFavorite}
+                />
                 <div className={styles.wrapComment}>
                     <Message className={styles.comment} />
                     <div className={styles.count}>{comments.length}</div>
