@@ -8,10 +8,81 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 
     .pathName {
         font-weight: 700;
         font-size: 2.4rem;
         color: $black;
+    }
+
+    .menu {
+        width: 4rem;
+        height: 2rem;
+        position: relative;
+        // overflow: hidden;
+        transition: all 1s;
+
+        .line {
+            position: absolute;
+            height: 0.2rem;
+            background: $black;
+            width: 100%;
+            border-radius: 0.4rem;
+            opacity: 1;
+            transition: all 1s;
+
+            &:nth-child(1) {
+                top: 0;
+                left: 0;
+            }
+            &:nth-child(2) {
+                top: 50%;
+                transform: translate(0, -50%);
+            }
+            &:nth-child(3) {
+                bottom: 0;
+                left: 0;
+            }
+        }
+
+        &.show {
+            // border: 1px solid rebeccapurple;
+
+            .line:nth-child(1) {
+                top: 0.2rem;
+                left: -5%;
+                transform: rotate(-45deg);
+                width: 50%;
+            }
+            .line:nth-child(2) {
+                top: 50%;
+                transform: translate(0, -50%);
+            }
+            .line:nth-child(3) {
+                bottom: 0.2rem;
+                left: -5%;
+                transform: rotate(45deg);
+                width: 50%;
+            }
+        }
+    }
+
+    .menuPage {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: -103%;
+        border-right: 0.2rem solid $black;
+        // border-bottom: .2rem solid $black;
+        z-index: 111;
+        background: $white;
+        transition: all 1s;
+        padding: 3rem 2rem 3rem 20vw;
+
+        &.showMenu {
+            left: -17%;
+        }
     }
 }

@@ -11,6 +11,7 @@ import GlobalContext from 'store/context';
 import { plural, stringToDate } from 'utils/index';
 import { TOGGLE_FAVORITE } from 'apollo/mutation';
 import FavoriteButton from 'components/common/favoriteButton';
+import classNames from 'classnames';
 
 interface DetailAdvert {
     _id: string;
@@ -33,7 +34,7 @@ interface Comment {
 }
 
 const DetailAdvert = () => {
-    // const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
+    // const cardClasses = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
     const {
         header: { setHeader },
@@ -233,6 +234,14 @@ const DetailAdvert = () => {
                         </div>
                     )}
 
+                    {Boolean(!advert?.contact) && (
+                        <div className={styles.contactSection}>
+                            <h5 className={styles.title}>
+                                контакты отсутствуют
+                            </h5>
+                        </div>
+                    )}
+
                     <FavoriteButton
                         isFavorite={isFavorite}
                         count={advert?.favoriteCount}
@@ -251,9 +260,15 @@ const DetailAdvert = () => {
                                     key={comment._id}
                                     className={styles.card}
                                 >
-                                    <h6 className={styles.author}>
-                                        {comment.author.username}
-                                    </h6>
+                                    <div className={styles.upComment}>
+                                        <h6 className={styles.author}>
+                                            {comment.author.username}
+                                        </h6>
+                                        <div className={styles.created}>
+                                            {stringToDate(comment?.createdAt)}
+                                        </div>
+                                    </div>
+
                                     <p className={styles.comment}>
                                         {comment.content}
                                     </p>
@@ -273,6 +288,14 @@ const DetailAdvert = () => {
                         className={styles.moreComment}
                         onClick={loadMoreComments}
                     />
+                )}
+
+                {Boolean(!comments?.length) && (
+                    <>
+                        <h5 className={styles.title}>
+                            комментарии отсутствуют
+                        </h5>
+                    </>
                 )}
             </div>
         </div>
