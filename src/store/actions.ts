@@ -28,9 +28,8 @@ const setLogin = (type: 'login', payload: string): object => ({
     payload,
 });
 
-const setLogout = (type: 'logout', payload: ''): object => ({
+const setLogout = (type: 'logout'): object => ({
     type,
-    payload,
 });
 
 const setUser = (type: 'userData', payload: object): object => ({

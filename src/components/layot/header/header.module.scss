@@ -20,6 +20,7 @@
         width: 4rem;
         height: 2rem;
         position: relative;
+        z-index: 11;
         // overflow: hidden;
         transition: all 1s;
 
@@ -79,10 +80,63 @@
         z-index: 111;
         background: $white;
         transition: all 1s;
-        padding: 3rem 2rem 3rem 20vw;
+        padding: 3rem 2rem 10vh 20vw;
 
         &.showMenu {
             left: -17%;
+        }
+
+        .hr {
+            margin-top: 1rem;
+            height: 0.3rem;
+            width: 100%;
+            background: $black;
+            border-radius: 0.4rem;
+        }
+
+        .manager {
+            margin-top: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            ul {
+                li {
+                    margin-top: 1rem;
+                    // text-decoration: underline;
+                    &:first-child {
+                        margin-top: 0;
+                    }
+
+                    span {
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    }
+
+    .overlay {
+        position: absolute;
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        transition: all 0.5s;
+
+        &._show {
+            display: block;
         }
     }
 }
