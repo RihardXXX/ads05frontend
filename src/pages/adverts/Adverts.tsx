@@ -8,7 +8,7 @@ import GlobalContext from 'store/context';
 
 // const data = [1, 2, 3, 4, 5, 6, 7];
 
-function Adverts() {
+const Adverts: React.FC = (): JSX.Element => {
     // const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
     const {
@@ -71,6 +71,6 @@ function Adverts() {
             />
         </>
     );
-}
+};
 
 export default Adverts;

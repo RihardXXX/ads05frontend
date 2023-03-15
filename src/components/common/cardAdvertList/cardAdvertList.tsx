@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styles from './cardAdvertList.module.scss';
 import CardAdvertPreview from 'components/common/cardAdvertPreview';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
@@ -15,12 +15,12 @@ interface Props {
     hasNextPage?: boolean;
 }
 
-const CardAdvertList = ({
+const CardAdvertList: React.FC<Props> = ({
     adverts,
     isLoading = false,
     loadMore,
     hasNextPage,
-}: Props): JSX.Element => {
+}): ReactElement => {
     const classesLoader = classNames(['loader', [styles.loader]]);
 
     return (

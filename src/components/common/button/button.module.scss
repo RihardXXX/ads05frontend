@@ -49,4 +49,8 @@
         background: $light-grey;
         color: $dark-grey;
     }
+
+    &.full {
+        width: 100%;
+    }
 }

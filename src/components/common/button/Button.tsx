@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styles from './button.module.scss';
 import classNames from 'classnames';
 
@@ -8,17 +8,19 @@ interface Props {
     type?: 'full' | 'outline';
     color?: 'black' | 'primary' | 'error';
     disabled?: boolean;
+    full?: boolean;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const Button = ({
+const Button: React.FC<Props> = ({
     name,
     className,
     type = 'full',
     color = 'black',
     disabled,
+    full = false,
     onClick,
-}: Props): JSX.Element => {
+}): ReactElement => {
     const classes = classNames([
         [styles.button],
         className,
@@ -29,6 +31,7 @@ const Button = ({
         { [styles.outline_primary]: type === 'outline' && color === 'primary' },
         { [styles.outline_error]: type === 'outline' && color === 'error' },
         { [styles.disabled]: disabled },
+        { [styles.full]: full },
     ]);
 
     return (

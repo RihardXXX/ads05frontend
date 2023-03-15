@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import styles from './header.module.scss';
 // import { useLocation } from 'react-router-dom';
 import classNames from 'classnames';
@@ -20,7 +20,7 @@ import { setLogout } from 'store/actions';
 //     '/detail-advert/:id': 'Подробнее',
 // };
 
-const Header = (): JSX.Element => {
+const Header: React.FC = (): ReactElement => {
     const classes = classNames([[styles.header]]);
 
     const [show, setShow] = useState<boolean>(false);

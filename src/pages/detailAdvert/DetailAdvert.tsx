@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useContext, useLayoutEffect } from 'react';
+import React, {
+    useEffect,
+    useMemo,
+    useContext,
+    useLayoutEffect,
+    useState,
+    ReactElement,
+} from 'react';
 import styles from './detailAdvert.module.scss';
 import { ReactComponent as Watch } from 'assets/icons/watch.svg';
 import Button from 'components/common/button';
@@ -12,6 +19,7 @@ import { plural, stringToDate } from 'utils/index';
 import { TOGGLE_FAVORITE } from 'apollo/mutation';
 import FavoriteButton from 'components/common/favoriteButton';
 import classNames from 'classnames';
+import BaseModal from 'components/common/baseModal';
 
 interface DetailAdvert {
     _id: string;
@@ -33,7 +41,7 @@ interface Comment {
     createdAt: string;
 }
 
-const DetailAdvert = () => {
+const DetailAdvert: React.FC = (): ReactElement => {
     // const cardClasses = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
 
     const {
@@ -172,6 +180,14 @@ const DetailAdvert = () => {
         });
     };
 
+    // show modal for comment
+    const [showModal, setShowModal] = useState(false);
+
+    const showModalChange = (event: React.MouseEvent): void => {
+        // event.stopPropagation();
+        setShowModal((status: boolean): boolean => !status);
+    };
+
     if (error) {
         return <h3>Что то пошло не так и объявление не найдено</h3>;
     }
@@ -179,6 +195,8 @@ const DetailAdvert = () => {
     return (
         <div className={styles.detailPage}>
             {loading || (isLoadingComments && <LoadedPage />)}
+
+            {showModal && <BaseModal onClick={showModalChange}>test</BaseModal>}
 
             {Boolean(advert) && (
                 <>
@@ -249,6 +267,12 @@ const DetailAdvert = () => {
                     />
                 </>
             )}
+
+            <Button
+                name="добавить комментарий"
+                type="outline"
+                onClick={showModalChange}
+            />
 
             <div className={styles.commentSection}>
                 {Boolean(comments?.length) && (
