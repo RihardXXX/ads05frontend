@@ -9,6 +9,7 @@ interface Props {
     color?: 'black' | 'primary' | 'error';
     disabled?: boolean;
     full?: boolean;
+    size?: 'default' | 'medium' | 'small';
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
@@ -19,6 +20,7 @@ const Button: React.FC<Props> = ({
     color = 'black',
     disabled,
     full = false,
+    size = 'default',
     onClick,
 }): ReactElement => {
     const classes = classNames([
@@ -32,6 +34,8 @@ const Button: React.FC<Props> = ({
         { [styles.outline_error]: type === 'outline' && color === 'error' },
         { [styles.disabled]: disabled },
         { [styles.full]: full },
+        { [styles.medium]: size === 'medium' },
+        { [styles.small]: size === 'small' },
     ]);
 
     return (

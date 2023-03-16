@@ -20,6 +20,7 @@ import { TOGGLE_FAVORITE } from 'apollo/mutation';
 import FavoriteButton from 'components/common/favoriteButton';
 import classNames from 'classnames';
 import BaseModal from 'components/common/baseModal';
+import MultiInput from 'components/common/multiInput';
 
 interface DetailAdvert {
     _id: string;
@@ -196,7 +197,14 @@ const DetailAdvert: React.FC = (): ReactElement => {
         <div className={styles.detailPage}>
             {loading || (isLoadingComments && <LoadedPage />)}
 
-            {showModal && <BaseModal onClick={showModalChange}>test</BaseModal>}
+            {showModal && (
+                <BaseModal onClick={showModalChange}>
+                    <MultiInput
+                        placeholder="напиши свой комментарий тут"
+                        size="medium"
+                    />
+                </BaseModal>
+            )}
 
             {Boolean(advert) && (
                 <>
@@ -271,6 +279,7 @@ const DetailAdvert: React.FC = (): ReactElement => {
             <Button
                 name="добавить комментарий"
                 type="outline"
+                size="small"
                 onClick={showModalChange}
             />
 
