@@ -5,6 +5,7 @@ import React, {
     useLayoutEffect,
     useState,
     ReactElement,
+    useCallback,
 } from 'react';
 import styles from './detailAdvert.module.scss';
 import { ReactComponent as Watch } from 'assets/icons/watch.svg';
@@ -189,6 +190,64 @@ const DetailAdvert: React.FC = (): ReactElement => {
         setShowModal((status: boolean): boolean => !status);
     };
 
+    // comment state
+
+    const [commentText, setCommentText] = useState<string | undefined>('');
+    const [errorComment, setErrorComment] = useState<boolean | string>('');
+
+    const changeCommentText = (event: React.FormEvent<HTMLTextAreaElement>) => {
+        setCommentText(event.currentTarget?.value.trim());
+    };
+
+    // check valid
+    const isValid = useCallback(() => {
+        let valid = true;
+        const limit = 10;
+
+        if (!commentText) {
+            valid = false;
+            setErrorComment('Поле комментария не может быть пустым');
+        }
+
+        if (commentText?.length && commentText.length > limit) {
+            valid = false;
+
+            setErrorComment(
+                `Комментарий не может быть больше ${limit} символов`
+            );
+
+            setCommentText((commentText): string | undefined => {
+                if (commentText) {
+                    return commentText?.slice(0, limit);
+                }
+            });
+        }
+
+        return valid;
+    }, [commentText]);
+
+    const addComment = (): void => {
+        console.log('add comment');
+        // reset error
+        setErrorComment(false);
+
+        // valid comment
+        const valid: boolean = isValid();
+
+        if (!valid) {
+            return;
+        }
+
+        console.log('submit');
+
+        // send gql
+    };
+
+    const focusComment = (): void => {
+        console.log('focusComment');
+        setErrorComment('');
+    };
+
     if (error) {
         return <h3>Что то пошло не так и объявление не найдено</h3>;
     }
@@ -202,7 +261,20 @@ const DetailAdvert: React.FC = (): ReactElement => {
                     <MultiInput
                         placeholder="напиши свой комментарий тут"
                         size="medium"
+                        value={commentText}
+                        isError={errorComment}
+                        onInput={changeCommentText}
+                        onFocus={focusComment}
                     />
+                    <Button
+                        name="добавить комментарий"
+                        full
+                        size="small"
+                        type="outline"
+                        className={styles.addComment}
+                        onClick={addComment}
+                    />
+                    <h5 className={styles.errorMessageShow}>{errorComment}</h5>
                 </BaseModal>
             )}
 

@@ -156,4 +156,15 @@
             opacity: 1;
         }
     }
+
+    .addComment {
+        margin-top: 1rem;
+    }
+
+    .errorMessageShow {
+        margin-top: 1rem;
+        width: 100%;
+        color: $error;
+        text-align: center;
+    }
 }
