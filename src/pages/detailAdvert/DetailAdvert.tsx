@@ -10,14 +10,14 @@ import React, {
 import styles from './detailAdvert.module.scss';
 import { ReactComponent as Watch } from 'assets/icons/watch.svg';
 import Button from 'components/common/button';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { DETAIL_ADVERT, COMMENT_FEED } from 'apollo/query';
 import Hashids from 'hashids';
 import LoadedPage from 'components/LoadedPage/LoadedPage';
 import GlobalContext from 'store/context';
 import { plural, stringToDate } from 'utils/index';
-import { TOGGLE_FAVORITE } from 'apollo/mutation';
+import { TOGGLE_FAVORITE, ADD_COMMENT } from 'apollo/mutation';
 import FavoriteButton from 'components/common/favoriteButton';
 import classNames from 'classnames';
 import BaseModal from 'components/common/baseModal';
@@ -53,11 +53,19 @@ const DetailAdvert: React.FC = (): ReactElement => {
         },
     } = useContext(GlobalContext);
 
+    // routing
+    const navigate = useNavigate();
+
     // set header
     useLayoutEffect(() => setHeader('Подробное описание'), []);
 
     // route param
     const { id }: { id?: string } = useParams();
+
+    const decode = useCallback(
+        (id: string) => new Hashids().decodeHex(id),
+        [id]
+    );
 
     const limit = 4;
 
@@ -78,7 +86,7 @@ const DetailAdvert: React.FC = (): ReactElement => {
             return;
         }
 
-        const _id = new Hashids().decodeHex(id);
+        const _id = decode(id);
 
         // console.log(_id);
         getAdvert({
@@ -144,7 +152,8 @@ const DetailAdvert: React.FC = (): ReactElement => {
             return;
         }
 
-        const _id = new Hashids().decodeHex(id);
+        const _id = decode(id);
+
         addRemoveFavorite({
             variables: {
                 toggleFavoriteId: _id,
@@ -152,14 +161,14 @@ const DetailAdvert: React.FC = (): ReactElement => {
         });
     };
 
-    const loadMoreComments = (e: React.MouseEvent): void => {
-        e.stopPropagation();
+    const loadMoreComments = (): void => {
+        // e.stopPropagation();
         // console.log('loadMore comments');
         if (!id) {
             return;
         }
 
-        const _id = new Hashids().decodeHex(id);
+        const _id = decode(id);
 
         fetchMoreComments({
             variables: {
@@ -185,7 +194,7 @@ const DetailAdvert: React.FC = (): ReactElement => {
     // show modal for comment
     const [showModal, setShowModal] = useState(false);
 
-    const showModalChange = (event: React.MouseEvent): void => {
+    const showModalChange = (): void => {
         // event.stopPropagation();
         setShowModal((status: boolean): boolean => !status);
     };
@@ -196,13 +205,13 @@ const DetailAdvert: React.FC = (): ReactElement => {
     const [errorComment, setErrorComment] = useState<boolean | string>('');
 
     const changeCommentText = (event: React.FormEvent<HTMLTextAreaElement>) => {
-        setCommentText(event.currentTarget?.value.trim());
+        setCommentText(event.currentTarget?.value);
     };
 
     // check valid
     const isValid = useCallback(() => {
         let valid = true;
-        const limit = 10;
+        const limit = 100;
 
         if (!commentText) {
             valid = false;
@@ -226,8 +235,13 @@ const DetailAdvert: React.FC = (): ReactElement => {
         return valid;
     }, [commentText]);
 
+    // apollo add comments
+    // Refetches two queries after mutation completes
+    const [addCommentGQL, { loading: isLoadingAddCom }] =
+        useMutation(ADD_COMMENT);
+
+    // add new comment
     const addComment = (): void => {
-        console.log('add comment');
         // reset error
         setErrorComment(false);
 
@@ -238,29 +252,58 @@ const DetailAdvert: React.FC = (): ReactElement => {
             return;
         }
 
-        console.log('submit');
+        if (!id) {
+            return;
+        }
+
+        const _id = decode(id);
 
         // send gql
+        addCommentGQL({
+            variables: {
+                content: commentText,
+                idAdvert: _id,
+            },
+            onCompleted: (): void => {
+                // fetch comments
+                loadMoreComments();
+                // clear textarea
+                setCommentText('');
+                // close modal
+                showModalChange();
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
     };
 
+    // focus multiInput clear error
     const focusComment = (): void => {
-        console.log('focusComment');
         setErrorComment('');
     };
 
+    // back page
+    const backStep = (): void => {
+        navigate(-1);
+    };
+
+    // Render template
     if (error) {
         return <h3>Что то пошло не так и объявление не найдено</h3>;
     }
 
     return (
         <div className={styles.detailPage}>
-            {loading || (isLoadingComments && <LoadedPage />)}
+            {loading ||
+                isLoadingAddCom ||
+                (isLoadingComments && <LoadedPage />)}
 
             {showModal && (
                 <BaseModal onClick={showModalChange}>
                     <MultiInput
                         placeholder="напиши свой комментарий тут"
-                        size="medium"
+                        size="default"
                         value={commentText}
                         isError={errorComment}
                         onInput={changeCommentText}
@@ -277,6 +320,14 @@ const DetailAdvert: React.FC = (): ReactElement => {
                     <h5 className={styles.errorMessageShow}>{errorComment}</h5>
                 </BaseModal>
             )}
+
+            <Button
+                name="назад"
+                color="black"
+                size="default"
+                full
+                onClick={backStep}
+            />
 
             {Boolean(advert) && (
                 <>

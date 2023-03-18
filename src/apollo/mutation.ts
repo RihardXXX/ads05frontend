@@ -59,3 +59,13 @@ export const TOGGLE_FAVORITE = gql`
         }
     }
 `;
+
+export const ADD_COMMENT = gql`
+    mutation NewComment($content: String!, $idAdvert: ID!) {
+        newComment(content: $content, idAdvert: $idAdvert) {
+            _id
+            content
+            createdAt
+        }
+    }
+`;
