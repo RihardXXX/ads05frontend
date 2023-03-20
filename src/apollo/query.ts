@@ -84,3 +84,65 @@ export const COMMENT_FEED = gql`
         }
     }
 `;
+
+export const ADVERT_FEED_FAVORITE = gql`
+    query AdvertFeedFavorite($offset: Int!, $limit: Int!) {
+        advertFeedFavorite(offset: $offset, limit: $limit) {
+            totalAdverts
+            hasNextPage
+            nextPage
+            offset
+            limit
+            # page
+            adverts {
+                _id
+                name
+                author {
+                    avatar
+                    username
+                }
+                createdAt
+                content
+                favoriteCount
+                comments {
+                    _id
+                    content
+                }
+                favoritedBy {
+                    id
+                }
+            }
+        }
+    }
+`;
+
+export const ADVERT_FEED_MY = gql`
+    query AdvertFeedMy($offset: Int!, $limit: Int!) {
+        advertFeedMy(offset: $offset, limit: $limit) {
+            totalAdverts
+            hasNextPage
+            nextPage
+            offset
+            limit
+            # page
+            adverts {
+                _id
+                name
+                author {
+                    avatar
+                    username
+                }
+                createdAt
+                content
+                favoriteCount
+                comments {
+                    _id
+                    content
+                }
+                favoritedBy {
+                    id
+                }
+            }
+        }
+    }
+`;

@@ -12,8 +12,6 @@ import { TOGGLE_FAVORITE } from 'apollo/mutation';
 import Hashids from 'hashids';
 import FavoriteButton from '../favoriteButton';
 
-// TODO: сделать запрос на избранное с обновлением на клиенте
-
 interface Author {
     avatar: string;
     username: string;
@@ -27,6 +25,7 @@ interface Props {
     favoriteCount: number;
     name: string;
     favoritedBy: [];
+    numberItem: number;
 }
 
 const CardAdvertPreview = ({
@@ -38,6 +37,7 @@ const CardAdvertPreview = ({
     author,
     content,
     favoritedBy,
+    numberItem,
 }: Props): JSX.Element => {
     // Change Header Page
     const {
@@ -53,7 +53,9 @@ const CardAdvertPreview = ({
     }, [favoriteCount]);
 
     // apollo
-    const [addRemoveFavorite, { loading }] = useMutation(TOGGLE_FAVORITE);
+    const [addRemoveFavorite, { loading }] = useMutation(TOGGLE_FAVORITE, {
+        // fetchPolicy: "network-only" // update state cache
+    });
 
     const toggleFavorite = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -91,7 +93,10 @@ const CardAdvertPreview = ({
                     </div>
                 )}
                 <div className={styles.wrapHeader}>
-                    <div className={styles.name}>{username}</div>
+                    <div className={styles.name}>
+                        {username}{' '}
+                        <div className={styles.numberItem}>{numberItem}</div>
+                    </div>
                     <div className={styles.date}>{stringToDate(createdAt)}</div>
                 </div>
             </div>

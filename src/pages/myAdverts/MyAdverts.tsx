@@ -1,22 +1,79 @@
-import React, { useLayoutEffect, useContext } from 'react';
+import React, {
+    useLayoutEffect,
+    useContext,
+    useEffect,
+    useMemo,
+    ReactElement,
+} from 'react';
 import GlobalContext from 'store/context';
-// import styles from './adverts.module.scss';
-// import classNames from 'classnames';
+import { useLazyQuery } from '@apollo/client';
+import CardAdvertList from 'components/common/cardAdvertList';
+import { ADVERT_FEED_MY } from 'apollo/query';
 
-const MyAdverts = () => {
-    // const classes = classNames([[styles.h2], { [styles.h2]: true, xxx: true }]);
-
+const MyAdverts: React.FC = (): ReactElement => {
     const {
         header: { setHeader },
     } = useContext(GlobalContext);
 
-    useLayoutEffect(() => setHeader('Мои'), []);
+    useLayoutEffect((): void => setHeader('Мои объявления'), []);
+
+    const limit = 4;
+
+    const [getInitial, { loading, data, fetchMore }] = useLazyQuery(
+        ADVERT_FEED_MY,
+        {
+            fetchPolicy: 'network-only', // update state cache
+        }
+    );
+
+    useEffect((): void => {
+        getInitial({
+            variables: {
+                offset: 0,
+                limit: limit,
+            },
+            notifyOnNetworkStatusChange: true, // loading status current
+        });
+    }, []);
+
+    const hasNextPage = useMemo(() => data?.advertFeedMy?.hasNextPage, [data]);
+
+    const loadMore = (): void => {
+        if (
+            data.advertFeedMy.adverts.length >= data.advertFeedMy.totalAdverts
+        ) {
+            return;
+        }
+
+        fetchMore({
+            variables: {
+                offset: data.advertFeedMy.adverts.length,
+                limit: 4,
+            },
+            updateQuery: (previousResult: any, { fetchMoreResult }: any) => {
+                return {
+                    advertFeedMy: {
+                        ...fetchMoreResult.advertFeedMy,
+                        offset: fetchMoreResult.advertFeedMy.offset + limit,
+                        adverts: [
+                            ...previousResult.advertFeedMy.adverts,
+                            ...fetchMoreResult.advertFeedMy.adverts,
+                        ],
+                    },
+                };
+            },
+        });
+    };
 
     return (
-        <div>
-            {/* <h2 className={classes}>Adverts</h2> */}
-            <h3>My Adverts</h3>
-        </div>
+        <>
+            <CardAdvertList
+                adverts={data?.advertFeedMy?.adverts || []}
+                isLoading={loading}
+                hasNextPage={hasNextPage}
+                loadMore={loadMore}
+            />
+        </>
     );
 };
 

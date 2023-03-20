@@ -40,7 +40,7 @@ const CardAdvertList: React.FC<Props> = ({
                 useWindow={false}
             >
                 {Boolean(adverts.length) &&
-                    adverts.map((advert: any) => (
+                    adverts.map((advert: any, i: number) => (
                         <CardAdvertPreview
                             key={advert._id}
                             id={advert._id}
@@ -51,6 +51,7 @@ const CardAdvertList: React.FC<Props> = ({
                             content={advert.content}
                             favoriteCount={advert.favoriteCount}
                             favoritedBy={advert.favoritedBy}
+                            numberItem={Number(i) + 1}
                         />
                     ))}
                 {Boolean(!adverts.length) && !isLoading && (

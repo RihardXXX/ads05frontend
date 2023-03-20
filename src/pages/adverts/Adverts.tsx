@@ -19,8 +19,12 @@ const Adverts: React.FC = (): JSX.Element => {
 
     const limit = 4;
 
-    const [getInitial, { loading, data, fetchMore }] =
-        useLazyQuery(ADVERTS_FEED);
+    const [getInitial, { loading, data, fetchMore }] = useLazyQuery(
+        ADVERTS_FEED,
+        {
+            //fetchPolicy: "network-only" // update state cache
+        }
+    );
 
     useEffect(() => {
         getInitial({

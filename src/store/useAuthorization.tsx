@@ -26,12 +26,6 @@ const initialState: StateAuthorization = {
     user: undefined,
 };
 
-// TODO: сделать авто авторизацию после перезагрузки отправляя токен
-// TODO: аналогично авторизации сделать регистрацию поведение с сохранением токена и пользователя
-// TODO: сделать в объявлениях избранное выбрано или нет окраску
-// TODO: сделать запрос на избранное
-// TODO: продумать обновление состояния после запроса на избранное
-
 const reducer = (state: StateAuthorization, action: ActionAuthorization) => {
     switch (action.type) {
         case login:
