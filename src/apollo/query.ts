@@ -39,6 +39,7 @@ export const ME_USER = gql`
             avatar
             email
             createdAt
+            confirmed
         }
     }
 `;

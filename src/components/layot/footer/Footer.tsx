@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './footer.module.scss';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
@@ -6,9 +6,20 @@ import { ReactComponent as Home } from 'assets/icons/home.svg';
 import { ReactComponent as Favorite } from 'assets/icons/favorite.svg';
 import { ReactComponent as My } from 'assets/icons/my.svg';
 import { ReactComponent as Add } from 'assets/icons/add.svg';
+import GlobalContext from 'store/context';
 
 const Footer = (): JSX.Element => {
+    const {
+        authorization: {
+            stateAuthorization: { user },
+        },
+    } = useContext(GlobalContext);
+
     const footerClasses = classNames([[styles.footer]]);
+    const createClasses = classNames([
+        [styles.item],
+        { [styles.disabled]: !user?.confirmed },
+    ]);
 
     return (
         <footer className={footerClasses}>
@@ -44,7 +55,7 @@ const Footer = (): JSX.Element => {
                             <My />
                         </NavLink>
                     </li>
-                    <li className={styles.item}>
+                    <li className={createClasses}>
                         <NavLink
                             to="create"
                             className={({ isActive }) =>

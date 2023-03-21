@@ -137,6 +137,11 @@ const Signin = () => {
         });
     };
 
+    const changeRoute = (event: React.MouseEvent<HTMLElement>): void => {
+        event.stopPropagation();
+        navigate('/signup');
+    };
+
     return (
         <div className={styles.container}>
             {loading || (loadingPassword && <LoadedPage />)}
@@ -174,6 +179,13 @@ const Signin = () => {
                     color="black"
                 />
             </form>
+
+            <Button
+                name="перейти на регистрацию"
+                className={styles.register}
+                color="black"
+                onClick={changeRoute}
+            />
 
             <Button
                 name="сбросить пароль"

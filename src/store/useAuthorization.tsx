@@ -7,6 +7,7 @@ export interface User {
     email: string;
     avatar: string;
     createdAt: string;
+    confirmed: boolean;
 }
 
 export interface ActionAuthorization {

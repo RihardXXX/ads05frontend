@@ -60,6 +60,9 @@ const Header: React.FC = (): ReactElement => {
         dispatchAuth(setLogout('logout'));
     };
 
+    const textNotification =
+        'вы должны завершить авторизацию и перейти по ссылке расположенной в вашей электронной почте, чтобы пользоваться всем функционалом приложения. Проверьте также папку спам.';
+
     return (
         <header className={classes}>
             <div
@@ -89,6 +92,27 @@ const Header: React.FC = (): ReactElement => {
                         <li>
                             анкета:{' '}
                             {user?.createdAt && stringToDate(user?.createdAt)}
+                        </li>
+                        <li>
+                            {Boolean(!user?.confirmed) && (
+                                <>
+                                    <Button
+                                        name={textNotification}
+                                        type="outline"
+                                        color="error"
+                                        size="small"
+                                    />
+                                    <Button
+                                        name="обновить страницу"
+                                        type="outline"
+                                        color="primary"
+                                        size="medium"
+                                        full
+                                        className={styles.reloadBtn}
+                                        onClick={() => window.location.reload()}
+                                    />
+                                </>
+                            )}
                         </li>
                     </ul>
                     <Button

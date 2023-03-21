@@ -101,6 +101,11 @@ const Signup = () => {
         });
     };
 
+    const changeRoute = (event: React.MouseEvent<HTMLElement>): void => {
+        event.stopPropagation();
+        navigate('/signin');
+    };
+
     return (
         <div className={styles.container}>
             {loading && <LoadedPage />}
@@ -147,6 +152,13 @@ const Signup = () => {
                     color="black"
                 />
             </form>
+            <Button
+                name="перейти на авторизацию"
+                className={styles.signin}
+                type="full"
+                color="black"
+                onClick={changeRoute}
+            />
         </div>
     );
 };

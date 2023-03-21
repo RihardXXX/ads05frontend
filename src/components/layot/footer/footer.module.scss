@@ -22,6 +22,11 @@
                 width: 25%;
                 height: 100%;
 
+                &.disabled {
+                    opacity: 0.4;
+                    pointer-events: none;
+                }
+
                 a {
                     height: 100%;
                     width: 100%;
