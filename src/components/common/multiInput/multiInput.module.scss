@@ -1,35 +1,40 @@
 @import 'assets/css/variables';
 
-.textareaWrap {
-    padding: 1.5rem;
+.wrap {
+    position: relative;
     width: 100%;
-    height: 11rem;
-    background: $white;
-    border: 0.2rem solid $black;
-    border-radius: 0.8rem;
-    font-size: 1.8rem;
 
-    &:focus {
-        outline: none;
-    }
-
-    &.medium {
-        height: 9rem;
-    }
-
-    &.small {
-        height: 7rem;
-    }
-
-    &.black {
+    .textareaWrap {
+        padding: 1.5rem;
+        width: 100%;
+        height: 11rem;
+        background: $white;
         border: 0.2rem solid $black;
-    }
+        border-radius: 0.8rem;
+        font-size: 1.8rem;
 
-    &.primary {
-        border: 0.2rem solid $primary;
-    }
+        &:focus {
+            outline: none;
+        }
 
-    &.error {
-        border: 0.2rem solid $error;
+        &.medium {
+            height: 9rem;
+        }
+
+        &.small {
+            height: 7rem;
+        }
+
+        &.black {
+            border: 0.2rem solid $black;
+        }
+
+        &.primary {
+            border: 0.2rem solid $primary;
+        }
+
+        &.error {
+            border: 0.2rem solid $error;
+        }
     }
 }

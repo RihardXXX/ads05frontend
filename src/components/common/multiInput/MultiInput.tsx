@@ -8,6 +8,9 @@ interface Props {
     placeholder?: string;
     value?: string;
     isError?: boolean | string;
+    label?: string;
+    id?: string;
+    className?: string;
     onInput: (event: React.FormEvent<HTMLTextAreaElement>) => void;
     onFocus: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
 }
@@ -18,10 +21,15 @@ const MultiInput: React.FC<Props> = ({
     placeholder = '',
     value = '',
     isError,
+    label = '',
+    id,
+    className,
     onInput,
     onFocus,
 }): ReactElement => {
-    const classesWrap: string = classNames([
+    const wrap = classNames([[styles.wrap], className]);
+
+    const textareaWrap: string = classNames([
         [styles.textareaWrap],
         {
             [styles.medium]: size === 'medium',
@@ -32,13 +40,21 @@ const MultiInput: React.FC<Props> = ({
         },
     ]);
     return (
-        <textarea
-            className={classesWrap}
-            placeholder={placeholder}
-            value={value}
-            onInput={onInput}
-            onFocus={onFocus}
-        />
+        <div className={wrap}>
+            {Boolean(label) && (
+                <label htmlFor={id} className={styles.label}>
+                    {label}
+                </label>
+            )}
+            <textarea
+                id={id}
+                className={textareaWrap}
+                placeholder={placeholder}
+                value={value}
+                onInput={onInput}
+                onFocus={onFocus}
+            />
+        </div>
     );
 };
 

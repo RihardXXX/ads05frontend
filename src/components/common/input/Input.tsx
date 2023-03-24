@@ -10,6 +10,7 @@ interface Props {
     maxLength?: number;
     isError?: boolean | string;
     value?: string;
+    placeholder?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -21,6 +22,7 @@ const Input = ({
     maxLength,
     isError,
     value,
+    placeholder,
     onChange,
 }: Props) => {
     const classesWrap = classNames([[styles.wrap], className, { test: true }]);
@@ -40,6 +42,7 @@ const Input = ({
                 type={type}
                 maxLength={maxLength}
                 value={value}
+                placeholder={placeholder}
                 onChange={onChange}
             />
         </div>
